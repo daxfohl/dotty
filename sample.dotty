@@ -8,20 +8,21 @@ foreign module StringFFI {
 }
 
 module Strings {
-  let ffi = import StringFFI();
+  let ffi = import StringFFI // 'ffi = { concat: { s1: rawstring, s2: rawstring } -> rawstring }
   
   // alias String = { raw: rawstring }
 
   let concat ss =
     let s1 = ss.s1 // 'ss = { s1: 's1 }
-	let s2 = ss.s2 // 'ss = { ss with s2: 's2 } = { s1: 's1, s2: 's2 }
-	let s1raw = s1.raw // 's1 = { raw: 's1raw }
-	let s2raw = s2.raw // 's2 = { raw: 's2raw }
-	let concatinput = { s1: s1raw, s2: s2raw } // 'ci: { s1: 's1raw, s2: 's2raw }
-	let sout = ffi.concat concatinput // 'sout: rawstring, 'ci: { s1: rawstring, s2: rawstring }
-	                                  // 's1raw: rawstring, 's2raw: rawstring
-	let out = { s1 with raw = sout }
-	out
+    let s2 = ss.s2 // 'ss = { ss with s2: 's2 } = { s1: 's1, s2: 's2 }
+    let s1raw = s1.raw // 's1 = { raw: 's1raw }
+    let s2raw = s2.raw // 's2 = { raw: 's2raw }
+    let concatinput = { s1: s1raw, s2: s2raw } // 'ci: { s1: 's1raw, s2: 's2raw }
+    let concat = ffi.concat // 'concat: { s1: rawstring, s2: rawstring } -> rawstring
+    let sout = concat concatinput // 'sout: rawstring, 'ci: { s1: rawstring, s2: rawstring }
+                                  // 's1raw: rawstring, 's2raw: rawstring
+    let out = { s1 with raw = sout }
+    out
     { s1 with raw = ffi.concat { s1.raw, s2.raw } }
   // spec concat =
   //   'a: { raw: rawstring }
